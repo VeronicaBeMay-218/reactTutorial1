@@ -1,36 +1,36 @@
-import { useState } from 'react'; //Primero importamos lo que nos va a servir 
+import { useState } from 'react'; //Lo que hacemos primero es importar los repositorios que vamos a usar 
 
-function Square({ value, onSquareClick }) {
-  return (
+function Square({ value, onSquareClick }) { //Se crea la funcon la cual regresa el valor de el boton precionado
+  return ( //Con esto indica que va a regresar los valores que esten dentro 
     <button className="square" onClick={onSquareClick}>
       {value}
     </button>
   );
 }
 
-function Board({ xIsNext, squares, onPlay }) {
+function Board({ xIsNext, squares, onPlay }) { //Se crea la funcion la cual va a resivir tres parametros
   function handleClick(i) {
-    if (calculateWinner(squares) || squares[i]) {
+    if (calculateWinner(squares) || squares[i]) { //Se ejecuta cada vez que los valores sean verdadeross
       return;
     }
     const nextSquares = squares.slice();
-    if (xIsNext) {
+    if (xIsNext) { //Cuando resive el valor es x
       nextSquares[i] = 'X';
-    } else {
+    } else { //De los contrario 0
       nextSquares[i] = 'O';
     }
     onPlay(nextSquares);
   }
 
-  const winner = calculateWinner(squares);
-  let status;
-  if (winner) {
-    status = 'Winner: ' + winner;
+  const winner = calculateWinner(squares); //Mensaje de turno y siguiente jugador
+  let status; //Se crea la variable
+  if (winner) { //Siempre que resiva un valor
+    status = 'Winner: ' + winner; //Muestra al ganador
   } else {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O');
+    status = 'Next player: ' + (xIsNext ? 'X' : 'O'); //De lo contrario muestra el turno del siguiente jugador
   }
 
-  return (
+  return ( //Regresa valores los cuales en el juego en si, el recuadro de el gato el cual va a cambiar siempre que se selecione un recuadro y se asigne el valor en turno dnetro la casillas
     <>
       <div className="status">{status}</div>
       <div className="board-row">
@@ -52,7 +52,7 @@ function Board({ xIsNext, squares, onPlay }) {
   );
 }
 
-export default function Game() {
+export default function Game() { //funcion del juego, hace que se ejecute todo
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentMove, setCurrentMove] = useState(0);
   const xIsNext = currentMove % 2 === 0;
@@ -68,25 +68,26 @@ export default function Game() {
     setCurrentMove(nextMove);
   }
 
-  const moves = history.map((squares, move) => {
-    let description;
-    if (move > 0) {
-      description = 'Go to move #' + move;
-    } else {
-      description = 'Go to game start';
+  const moves = history.map((squares, move) => { //Funcion que muestra el estado de avance del juego, o los pasos que a dado
+    let description; //Creo una variable
+    if (move > 0) { //Si el valor resivido es mayo a 0
+      description = 'Go to move #' + move; //Muestra este mensaje
+    } else { //De lo contrario
+      description = 'Go to game start'; //De lo contrario este
     }
-    return (
-      <li key={move}>
-        <button onClick={() => jumpTo(move)}>{description}</button>
+    return ( //llama al metodo return el cual regresa los valores
+    //Los agrega en un formato tipo lista para html y dentro un boton con el nuemro de movimiento
+      <li key={move}> 
+        <button onClick={() => jumpTo(move)}>{description}</button> 
       </li>
     );
   });
 
-  return (
+  return ( //regresa los valores de la funcion principal con nombre game, el cual regresa el formato en el cual va a mostrar la lista de pasos 
     <div className="game">
       <div className="game-board">
         <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
-      </div>
+      </div> 
       <div className="game-info">
         <ol>{moves}</ol>
       </div>
@@ -94,8 +95,8 @@ export default function Game() {
   );
 }
 
-function calculateWinner(squares) {
-  const lines = [
+function calculateWinner(squares) { //Funcion que valida que se gane
+  const lines = [ //Lista de cotejo de valores 
     [0, 1, 2],
     [3, 4, 5],
     [6, 7, 8],
@@ -105,11 +106,11 @@ function calculateWinner(squares) {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
+  for (let i = 0; i < lines.length; i++) { //Ciclo que recorre la lista anterior
+    const [a, b, c] = lines[i]; //Pone en a, b, c los valores de la lista
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) { //Condiciona que si los tres valores son iguales
+      return squares[a]; //Regrese el valor 
     }
   }
-  return null;
+  return null; //De los contrario un nulo
 }
